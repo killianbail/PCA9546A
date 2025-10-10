@@ -16,19 +16,20 @@ extern "C" {
 // Includes
 
 #include <stm32wb5mxx.h>
+#include <stm32wbxx_hal.h>
 
 // Address definitions
 
-#define PCA9546A_ADDR_BASE 					0b1110'0000
-#define PCA9546A_ADDR_A2_MASK				0b0000'1000
-#define PCA9546A_ADDR_A1_MASK				0b0000'0100
-#define PCA9546A_ADDR_A0_MASK				0b0000'0010
+#define PCA9546A_ADDR_BASE 					0b11100000
+#define PCA9546A_ADDR_A2_MASK				0b00001000
+#define PCA9546A_ADDR_A1_MASK				0b00000100
+#define PCA9546A_ADDR_A0_MASK				0b00000010
 
 // Constants
 
 #define PCA9546A_NUMBER_OF_CHANNELS			4
 #define PCA9546A_RESET_DELAY_SECONDS		0.001f
-#define PCA9546A_VALID_CHANNELS_MASK		0b0000'1111
+#define PCA9546A_VALID_CHANNELS_MASK		0b00001111
 
 // Multiplexer structure
 
@@ -48,21 +49,21 @@ typedef struct Pca9546a {
  * @brief Perform hard reset through reset pin.
  * @param mux Handle to the PCA9548A structure.
  */
-void pca9548a_reset(Pca9546a *mux);
+void pca9546a_reset(Pca9546a *mux);
 
 /**
  * @brief Select the given channel.
  * @param mux Handle to the PCA9548A structure.
  * @param channel Channel number between 0 and 3. Do nothing if value is out of bounds.
  */
-void pca9548a_select_single_channel(Pca9546a *mux, uint8_t channel);
+void pca9546a_select_single_channel(Pca9546a *mux, uint8_t channel);
 
 /**
  * @brief Select channels according to the given mask.
  * @param mux Handle to the PCA9548A structure.
  * @param mask Bits 0 to 3 sets the channels which will be enabled. Bits 4 to 7 are ignored.
  */
-void pca9548a_set_selected_channels(Pca9546a *mux, uint8_t mask);
+void pca9546a_set_selected_channels(Pca9546a *mux, uint8_t mask);
 
 /**
  * Read selected channels.

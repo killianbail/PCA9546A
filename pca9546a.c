@@ -19,27 +19,27 @@ static uint8_t currentMask = ~PCA9546A_VALID_CHANNELS_MASK;
 
 // Definitions
 
-void pca9548a_reset(Pca9546a *mux) {
+void pca9546a_reset(Pca9546a *mux) {
 
 	// Pull down and up the reset pin
-	HAL_GPIO_WritePin(mux->rst_port, mux->rst_pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(mux->resetPort, mux->resetPin, GPIO_PIN_RESET);
 	osDelay(SECONDS_TO_TICKS(PCA9546A_RESET_DELAY_SECONDS));
-	HAL_GPIO_WritePin(mux->rst_port, mux->rst_pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(mux->resetPort, mux->resetPin, GPIO_PIN_SET);
 	osDelay(SECONDS_TO_TICKS(PCA9546A_RESET_DELAY_SECONDS));
-	pca9548a_set_selected_channels(mux, 0);
+	pca9546a_set_selected_channels(mux, 0);
 }
 
-void pca9548a_select_single_channel(Pca9546a *mux, uint8_t channel) {
+void pca9546a_select_single_channel(Pca9546a *mux, uint8_t channel) {
 
 	// If channel is out of range, do nothing
 	if(channel >= PCA9546A_NUMBER_OF_CHANNELS)
 		return;
 
 	// Enable only selected channel
-	pca9548a_set_selected_channels(mux, 1 << channel);
+	pca9546a_set_selected_channels(mux, 1 << channel);
 }
 
-void pca9548a_set_selected_channels(Pca9546a *mux, uint8_t mask) {
+void pca9546a_set_selected_channels(Pca9546a *mux, uint8_t mask) {
 
 	// Memorize last set channel, avoid unnecessary writes
 	mask &= PCA9546A_VALID_CHANNELS_MASK;
