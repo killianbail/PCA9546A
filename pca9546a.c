@@ -10,12 +10,8 @@
 
 #include <cmsis_os2.h>
 #include "pca9546a.h"
-#include "i2c.h"
+#include "i2c_dma.h"
 #include "utils.h"
-
-// Static variables
-
-static uint8_t currentMask = ~PCA9546A_VALID_CHANNELS_MASK;
 
 // Definitions
 
@@ -43,22 +39,22 @@ void pca9546a_set_selected_channels(Pca9546a *mux, uint8_t mask) {
 
 	// Memorize last set channel, avoid unnecessary writes
 	mask &= PCA9546A_VALID_CHANNELS_MASK;
-	if(mask == currentMask)
+	if(mask == mux->currentMask)
 		return;
-	currentMask = mask;
+	mux->currentMask = mask;
 
 	// Apply new mask
-	i2c_lock(mux->hi2c);
-	i2c_write(mux->hi2c, mux->address, &currentMask, 1);
-	i2c_unlock(mux->hi2c);
+	i2c_dma_lock(mux->hi2c);
+	i2c_dma_write(mux->hi2c, mux->address, &mux->currentMask, 1);
+	i2c_dma_unlock(mux->hi2c);
 }
 
 uint8_t pca9546a_get_selected_channels(Pca9546a *mux) {
 
 	// Read and update current channel mask
-	i2c_lock(mux->hi2c);
-	i2c_read(mux->hi2c, mux->address, &currentMask, 1);
-	i2c_unlock(mux->hi2c);
-	currentMask &= PCA9546A_VALID_CHANNELS_MASK;
-	return currentMask;
+	i2c_dma_lock(mux->hi2c);
+	i2c_dma_read(mux->hi2c, mux->address, &mux->currentMask, 1);
+	i2c_dma_unlock(mux->hi2c);
+	mux->currentMask &= PCA9546A_VALID_CHANNELS_MASK;
+	return mux->currentMask;
 }

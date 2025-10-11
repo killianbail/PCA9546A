@@ -41,6 +41,7 @@ typedef struct Pca9546a {
 	uint8_t address;
 	GPIO_TypeDef *resetPort;
 	uint16_t resetPin;
+	uint8_t currentMask;
 } Pca9546a;
 
 // Functions prototypes
