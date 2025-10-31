@@ -2,8 +2,7 @@
  * @file pca9546a.h
  * @author Killian Baillifard
  * @date 10.10.2025
- * @brief PCA9546A interface for the STM32WB5MXX plateform.
- * @copyright Copyright (c) 2023 Jonathan Tainer. Subject to the BSD 2-Clause License.
+ * @brief PCA9546A interface.
  */
 
 #ifndef PCA9546A_H
@@ -37,10 +36,7 @@ extern "C" {
  * @brief PCA9546A structure.
  */
 typedef struct Pca9546a {
-	I2C_HandleTypeDef *hi2c;
 	uint8_t address;
-	GPIO_TypeDef *resetPort;
-	uint16_t resetPin;
 	uint8_t currentMask;
 } Pca9546a;
 

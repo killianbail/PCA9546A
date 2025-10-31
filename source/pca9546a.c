@@ -2,26 +2,23 @@
  * @file pca9546a.c
  * @author Killian Baillifard
  * @date 10.10.2025
- * @brief PCA9546A implementation for the STM32WB5MXX plateform.
- * @copyright Copyright (c) 2023 Jonathan Tainer. Subject to the BSD 2-Clause License.
+ * @brief PCA9546A implementation.
  */
 
 // Includes
 
-#include <cmsis_os2.h>
 #include "pca9546a.h"
-#include "i2c_dma.h"
-#include "sleep.h"
+#include "pca9546a_platform.h"
 
 // Implementations
 
 void pca9546a_reset(Pca9546a *mux) {
 
 	// Pull down and up the reset pin
-	HAL_GPIO_WritePin(mux->resetPort, mux->resetPin, GPIO_PIN_RESET);
-	sleep(PCA9546A_RESET_DELAY_SECONDS);
-	HAL_GPIO_WritePin(mux->resetPort, mux->resetPin, GPIO_PIN_SET);
-	sleep(PCA9546A_RESET_DELAY_SECONDS);
+	pca9548a_gpio_write_reset_pin(mux->address, false);
+	pca9548a_sleep(PCA9546A_RESET_DELAY_SECONDS);
+	pca9548a_gpio_write_reset_pin(mux->address, true);
+	pca9548a_sleep(PCA9546A_RESET_DELAY_SECONDS);
 	pca9546a_set_selected_channels(mux, 0);
 }
 
@@ -41,20 +38,16 @@ void pca9546a_set_selected_channels(Pca9546a *mux, uint8_t mask) {
 	mask &= PCA9546A_VALID_CHANNELS_MASK;
 	if(mask == mux->currentMask)
 		return;
-	mux->currentMask = mask;
 
 	// Apply new mask
-	i2c_dma_lock(mux->hi2c);
-	i2c_dma_write(mux->hi2c, mux->address, &mux->currentMask, 1);
-	i2c_dma_unlock(mux->hi2c);
+	mux->currentMask = mask;
+	pca9548a_i2c_write(mux->address, mux->currentMask);
 }
 
 uint8_t pca9546a_get_selected_channels(Pca9546a *mux) {
 
 	// Read and update current channel mask
-	i2c_dma_lock(mux->hi2c);
-	i2c_dma_read(mux->hi2c, mux->address, &mux->currentMask, 1);
-	i2c_dma_unlock(mux->hi2c);
+	mux->currentMask = pca9548a_i2c_read(mux->address);
 	mux->currentMask &= PCA9546A_VALID_CHANNELS_MASK;
 	return mux->currentMask;
 }
