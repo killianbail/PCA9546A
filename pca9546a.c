@@ -11,17 +11,17 @@
 #include <cmsis_os2.h>
 #include "pca9546a.h"
 #include "i2c_dma.h"
-#include "utils.h"
+#include "sleep.h"
 
-// Definitions
+// Implementations
 
 void pca9546a_reset(Pca9546a *mux) {
 
 	// Pull down and up the reset pin
 	HAL_GPIO_WritePin(mux->resetPort, mux->resetPin, GPIO_PIN_RESET);
-	osDelay(SECONDS_TO_TICKS(PCA9546A_RESET_DELAY_SECONDS));
+	sleep(PCA9546A_RESET_DELAY_SECONDS);
 	HAL_GPIO_WritePin(mux->resetPort, mux->resetPin, GPIO_PIN_SET);
-	osDelay(SECONDS_TO_TICKS(PCA9546A_RESET_DELAY_SECONDS));
+	sleep(PCA9546A_RESET_DELAY_SECONDS);
 	pca9546a_set_selected_channels(mux, 0);
 }
 
