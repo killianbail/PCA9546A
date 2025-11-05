@@ -18,9 +18,9 @@ extern "C" {
 
 /**
  * @brief Platform-specific sleep function.
- * @param milliseconds Time to sleep in milliseconds.
+ * @param seconds Time to sleep in seconds.
  */
-void pca9548a_sleep(float milliseconds);
+void pca9548a_sleep(float seconds);
 
 /**
  * @brief Platform-specific GPIO write function for the reset pin.
