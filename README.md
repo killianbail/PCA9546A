@@ -4,6 +4,12 @@
 
 This library provides a high level multiplatform C interface for Texas Instruments **PCA9546A** I2C multiplexer.
 
+## Usage
+
+Two functions in [pca9546a.h](./include/pca9546a.h) allow to set the selection of the multiplexer :
+- `pca9546a_select_single_channel` to select one channel.
+- `pca9546a_set_selected_channels` to select multiple channels using a mask.
+
 ## Platform
 
 To work with this library, 1 files must be implemented :
