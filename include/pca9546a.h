@@ -3,6 +3,7 @@
  * @author Killian Baillifard
  * @date 10.10.2025
  * @brief PCA9546A interface.
+ * @copyright Copyright (c) 2023, Jonathan Tainer, Licensed under the BSD-2 License. See the LICENSE file in the project root for full license information.
  */
 
 #ifndef PCA9546A_H
